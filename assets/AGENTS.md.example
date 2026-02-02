@@ -1,0 +1,101 @@
+# Repository Guidelines
+## Project Structure & Module Organization
+> ⚠️ If the project structure changes, update this section periodically.
+
+```
+PROJECT/
+├── docs/ # Documentation and plans
+│ ├── adr/ # ADRs
+│ ├── plan/ # Planning documents
+│ ├── 00_overview.md # Overview
+│ ├── 10_architecture.md # Architecture
+│ ├── ...
+│ └── 80_style_guide.md # Style guide
+├── public/ # Static assets
+├── src/
+│ ├── app/ # Next.js App Router entry
+│ │ ├── api/ # API routes
+│ │ │ └── debug/ # MCP debug API
+│ │ ├── login/ # Login page
+│ │ ├── layout.tsx # Root layout
+│ │ ├── page.tsx # Home page
+│ │ └── globals.css # Global styles
+│ ├── components/ # UI components
+│ │ └── debug/ # MCP debug bridge
+│ ├── lib/ # Domain logic / utilities
+│ │ └── debug/ # MCP debug state
+│ └── test/ # Test setup
+├── scripts/
+│ └── mcp/ # MCP server scripts
+├── supabase/ # Supabase schema/policies/migrations
+├── .env.example # Example environment variables
+├── middleware.ts # Auth middleware
+├── package.json # Dependencies/scripts
+├── vitest.config.ts # Test configuration
+├── next.config.ts # Next.js configuration
+├── tsconfig.json # TypeScript configuration
+├── AGENTS.md # Agent guidelines
+└── README.md # Project overview
+```
+
+Module layout
+- `src/app`: Routing and UI composition
+- `src/components`: Graph/timeline/chat/editor UI
+- `src/lib`: Data store, AI, RAG, Supabase, storage utilities
+- `src/lib/debug`: MCP debug snapshots/action queue
+- `src/components/debug`: MCP debug bridge
+- `scripts/mcp`: MCP server scripts (development/debugging only)
+- `supabase/`: Schema/policies/migrations management
+
+## Documentation
+- All documentation must be written in <DOCS_LANGUAGE>.
+- If user ask to generate a plan, save it as `docs/plan/YYYYMMDD_HHmm_task-name_plan.md
+  - If a plan covers vast, multiple tasks, split it into multiple plans and save it as `docs/plan/YYYYMMDD_HHmm_task-name_plan/01_subtask_name.md`, `docs/plan/YYYYMMDD_HHmm_task-name_plan/02_subtask_name.md`, etc.
+- If you make a decision that affects the architecture of the project, save it as `docs/adr/YYYYMMDD_HHmm_decision-name.md`
+
+## Coding Style & Naming Conventions
+- Indentation: 4 spaces; avoid trailing whitespace; keep lines ≲120 chars.
+- Docstring: Write a docstring for every function and class. Each docstring should briefly describe what the function or class does, and must include `Args:` and `Returns:` sections where appropriate.
+- Imports: group logically (standard library → third-party → local); prefer specific imports.
+- Formatting: keep consistent with existing code; use Black formatter.
+- Comments: must be written in Korean.
+
+
+## Commit Message & PR Guidelines
+### Commit Message Format
+When writing a commit message, **strictly follow** the format below:
+
+* **Title**
+  `{Add | Fix | Refactor | Docs | Style | Test | Chore}: {Short, imperative description}`
+* **Body**
+  A detailed description that clearly explains:
+  * **Why** the change is necessary
+  * **What** was changed
+  * **ADR (Architectural Decision Record)**, if applicable
+
+* All commit messages and pull request descriptions **must be written in <Commit Message Language>**.
+* Use another language **only if the user explicitly requests it**.
+
+### Atomic Commits
+* Each commit **must be atomic** and represent a single, coherent purpose.
+* If a request involves multiple changes:
+  * **Split commits by intent and responsibility**, not by convenience.
+  * Avoid bundling unrelated or loosely related changes into a single commit.
+
+
+## Agent Operation & Safety Rules
+- Default-allowed operations: Edit files in the local workspace to implement requested changes; inspect code; and run local test commands when relevant to the requested task.
+- Prohibited without explicit user approval: network access not inherent to the task; environment/system configuration changes; and destructive operations.
+  - (optional) Git command excepts status check commands like `git logs`.
+- Ask before acting: When an operation could be destructive, high-impact, long-running, or ambiguous, ask for confirmation with a concise plan and the exact commands.
+- Minimal scope: Prefer the smallest, surgical change that resolves the issue; avoid unrelated edits or refactors.
+- Reproducibility: When possible, include exact commands to build, run, and test the changes. Avoid long/expensive commands unless requested.
+
+## Language Policy
+- Always respond in the same language used by the user's latest message, unless the user explicitly requests another language.
+- In mixed-language contexts, follow the user's preference per message; code, logs, and paths should remain as-is.
+
+## User Interaction
+- Be concise and actionable. Provide short, clear next steps.
+- Before running grouped actions, briefly summarize what you will do next.
+- If constraints prevent an action (permissions, missing tools), state the limitation and offer alternatives.

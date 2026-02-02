@@ -27,12 +27,15 @@ This skill generates:
 - Prefer correctness and safety over completeness.
 - Optimize for agent execution, not human prose.
 - Minimize exploration cost and failure modes.
+- If the given repository follows a monorepo pattern, create a subdirectory under docs/ for each project so the documentation doesn’t get mixed together.
+  - Example) `docs/frontend/00_overview.md` `docs/frontend/adr` `docs/frontend/plan`
 
 ---
 
 ## Execution Steps
 
 ### Step 1: Repository Inspection
+
 - Detect:
   - Primary language(s)
   - Framework(s)
@@ -51,27 +54,14 @@ If detection is ambiguous:
 ---
 
 ### Step 2: Confirm Ambiguities & Decisions With the Human
-If any key choices are unclear, pause and ask the human to pick from provided options.
-Optimize for fast, low-friction answers (checkbox/radio style), and record the chosen decisions explicitly.
 
-Important:
-- Ask these questions at skill execution time (in chat).
-- Do not generate a “question list” inside the output docs; docs should only record decisions and remaining “Unknown / TODO” items.
+Request the user to provide the following information:
 
-Ask (provide options; allow “Unknown / Decide later”):
-
-- Project intent & scope for agent work:
-  - Risk tolerance: [Conservative / No destructive ops] / [Standard] / [Aggressive with approval]
-
-- Test strategy:
-  - [Unit only] / [Unit + integration] / [E2E included] / [No tests yet]
-  - Runner: [pytest] / [vitest] / [jest] / [go test] / [other: ____] / [Unknown]
-
-- Constraints & guardrails:
-  - Allowed operations: [Read-only] / [Code edits] / [Dependency changes] / [Infra changes] / [Other: ____]
-  - Forbidden operations (explicit): [Prod deploy] / [DB migrations] / [Secrets rotation] / [Git Operations] / [Other: ____]
-
-- Any additional ambiguities identified during Step 1.
+- Whether Git-related commands are allowed: use freely vs use only with explicit approval
+- Language preferences:
+  - Language for comments, documents and commit messages
+  - Communication language: same as the user vs a specific language
+- Any other items discovered in Step 1 that are ambiguous or seem to require questions
 
 If the human does not answer:
 - Do NOT guess.
@@ -80,23 +70,25 @@ If the human does not answer:
 ---
 
 ### Step 3: Generate AGENTS.md
+First, copy `assets/AGENTS.md.example`, then edit it based on the information gathered so far to create `AGENTS.md`.
 
 AGENTS.md MUST include:
-1. Repository mission (≤5 lines)
-2. Repository map (key directories only)
-3. Golden paths for:
-   - Bug fix
-   - Feature addition
-   - Refactoring
-4. Canonical commands:
-   - Install
-   - Run
-   - Test
-   - Lint / typecheck
-5. Secrets & configuration keys (names only)
-6. Allowed and forbidden operations
-7. Constraints & guardrails
-8. Top failure modes & troubleshooting
+# Repository Guidelines
+## Project Structure & Module Organization
+
+## Documentation
+
+## Coding Style & Naming Conventions
+
+## Commit Message & PR Guidelines
+### Commit Message Format
+### Atomic Commits
+
+## Agent Operation & Safety Rules
+
+## Language Policy
+
+## User Interaction
 
 Hard rules:
 - Keep AGENTS.md concise (target: 50–120 lines)
