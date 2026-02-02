@@ -70,7 +70,7 @@ If the human does not answer:
 ---
 
 ### Step 3: Generate AGENTS.md
-First, copy `assets/AGENTS.md.example`, then edit it based on the information gathered so far to create `AGENTS.md`.
+First, copy [AGENTS.md.example](`assets/AGENTS.md.example`), then edit it based on the information gathered so far to create `AGENTS.md`.
 
 AGENTS.md MUST include:
 # Repository Guidelines
